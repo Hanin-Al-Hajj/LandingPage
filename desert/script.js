@@ -1,6 +1,6 @@
 let mode = 'day';
 
-
+/* nature branch: mirrored section mapping for the shared desert page */
 const content = {
   sunmoon: {
     day:   { eyebrow:'— Midday Command',  title:'My blazing throne',   body:'I stare at the sun without blinking. We have an understanding — it burns so I don\'t have to. I ride its rays down to the sand each morning and dare the horizon to stop me.' },
@@ -29,11 +29,20 @@ const content = {
 };
 
 
-document.getElementById('timeToggle').addEventListener('click', () => {
+document.getElementById('timeToggle').addEventListener('click', toggleMode);
+
+function toggleMode() {
   mode = mode === 'day' ? 'night' : 'day';
-  mode === 'day' ? applyDay() : applyNight();
-  speak(mode === 'day' ? '🏜️ She commands. The sun obeys.' : '🌙 She rules the dark. The stars bow.');
-});
+  const isDay = mode === 'day';
+
+  if (isDay) {
+    applyDay();
+  } else {
+    applyNight();
+  }
+
+  speak(isDay ? '🏜️ She commands. The sun obeys.' : '🌙 She rules the dark. The stars bow.');
+}
 
 function applyDay() {
   document.getElementById('thumb').style.cssText    = 'left:3px;background:#fb923c;box-shadow:0 0 12px rgba(255,150,0,0.9)';
@@ -179,22 +188,24 @@ function setOp(id, val) {
 }
 
 function updateTexts(m) {
-  const pairs = [
-    ['smEyebrow','smTitle','smBody','sunmoon'],
-    ['dEyebrow','dTitle','dBody','dunes'],
-    ['stEyebrow','stTitle','stBody','storm'],
-    ['cEyebrow','cTitle','cBody','cacti'],
-    ['skEyebrow','skTitle','skBody','stars'],
-    ['oEyebrow','oTitle','oBody','oasis'],
+  const sections = [
+    { eyebrowId: 'smEyebrow', titleId: 'smTitle', bodyId: 'smBody', key: 'sunmoon' },
+    { eyebrowId: 'dEyebrow', titleId: 'dTitle', bodyId: 'dBody', key: 'dunes' },
+    { eyebrowId: 'stEyebrow', titleId: 'stTitle', bodyId: 'stBody', key: 'storm' },
+    { eyebrowId: 'cEyebrow', titleId: 'cTitle', bodyId: 'cBody', key: 'cacti' },
+    { eyebrowId: 'skEyebrow', titleId: 'skTitle', bodyId: 'skBody', key: 'stars' },
+    { eyebrowId: 'oEyebrow', titleId: 'oTitle', bodyId: 'oBody', key: 'oasis' },
   ];
-  pairs.forEach(([e,t,b,key]) => {
-    const d  = content[key][m];
-    const eEl = document.getElementById(e);
-    const tEl = document.getElementById(t);
-    const bEl = document.getElementById(b);
-    if (eEl) eEl.textContent = d.eyebrow;
-    if (tEl) tEl.textContent = d.title;
-    if (bEl) bEl.textContent = d.body;
+
+  sections.forEach(({ eyebrowId, titleId, bodyId, key }) => {
+    const sectionContent = content[key][m];
+    const eyebrow = document.getElementById(eyebrowId);
+    const title = document.getElementById(titleId);
+    const body = document.getElementById(bodyId);
+
+    if (eyebrow) eyebrow.textContent = sectionContent.eyebrow;
+    if (title) title.textContent = sectionContent.title;
+    if (body) body.textContent = sectionContent.body;
   });
 }
 
