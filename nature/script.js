@@ -27,9 +27,16 @@ const content = {
 /* DAY / NIGHT TOGGLE*/
 document.getElementById('timeToggle').addEventListener('click', () => {
   mode = mode === 'morning' ? 'night' : 'morning';
-  mode === 'morning' ? applyMorning() : applyNight();
-  speak(mode === 'morning' ? '🌿 She wakes. The world follows.' : '🌙 She rests. The stars take over.');
-});
+  const isMorning = mode === 'morning';
+
+  if (isMorning) {
+    applyMorning();
+  } else {
+    applyNight();
+  }
+
+  speak(isMorning ? '🌿 She wakes. The world follows.' : '🌙 She rests. The stars take over.');
+}
 
 function applyMorning() {
   document.getElementById('thumb').style.cssText    = 'left:3px;background:#facc15;box-shadow:0 0 12px rgba(255,215,0,0.9)';
@@ -140,6 +147,10 @@ function applyNight() {
 
   set('footer','background','#000');
   updateTexts('night');
+}
+
+function getById(id) {
+  return document.getElementById(id);
 }
 
 function set(id, prop, val) {
